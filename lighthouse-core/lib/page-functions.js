@@ -163,14 +163,20 @@ function ultradumbBenchmark() {
 
 /**
  * Adapted from DevTools' SDK.DOMNode.prototype.path
- *   https://github.com/ChromeDevTools/devtools-frontend/blob/7a2e162ddefd/front_end/sdk/DOMModel.js#L530-L552
- * TODO: Doesn't handle frames or shadow roots...
+ *   https://github.com/ChromeDevTools/devtools-frontend/blob/4fff931bb/front_end/sdk/DOMModel.js#L625-L647
+ * Backend: https://source.chromium.org/search?q=f:node.cc%20symbol:PrintNodePathTo&sq=&ss=chromium%2Fchromium%2Fsrc
+ *
+ * TODO: Doesn't handle frames.
  * @param {Node} node
  */
 /* istanbul ignore next */
 function getNodePath(node) {
   /** @param {Node} node */
   function getNodeIndex(node) {
+    if (node === Node.DOCUMENT_FRAGMENT_NODE) {
+      // Shadow root that's not user-agent shadow root
+      return 'a';
+    }
     let index = 0;
     let prevNode;
     while (prevNode = node.previousSibling) {
@@ -182,15 +188,15 @@ function getNodePath(node) {
     return index;
   }
 
+  function getNodeParent(node) {
+    return node.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? node.host : node.parentNode
+  }
+
   const path = [];
-  while (node && node.parentNode) {
+  while (node && !!getNodeParent(node)) {
     const index = getNodeIndex(node);
     path.push([index, node.nodeName]);
-    if (node.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-      node = node.parentNode.host;
-    } else {
-      node = node.parentNode;
-    }
+    node = getNodeParent(node);
   }
   path.reverse();
   return path.join(',');
