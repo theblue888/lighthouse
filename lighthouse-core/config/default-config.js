@@ -304,6 +304,7 @@ const defaultConfig = {
     'byte-efficiency/uses-responsive-images',
     'byte-efficiency/efficient-animated-content',
     'dobetterweb/appcache-manifest',
+    'dobetterweb/bloated-libraries',
     'dobetterweb/doctype',
     'dobetterweb/charset',
     'dobetterweb/dom-size',
@@ -553,6 +554,7 @@ const defaultConfig = {
         {id: 'charset', weight: 1, group: 'best-practices-browser-compat'},
         // General Group
         {id: 'appcache-manifest', weight: 1, group: 'best-practices-general'},
+        {id: 'bloated-libraries', weight: 0, group: 'best-practices-general'},
         {id: 'js-libraries', weight: 0, group: 'best-practices-general'},
         {id: 'deprecations', weight: 1, group: 'best-practices-general'},
         {id: 'errors-in-console', weight: 1, group: 'best-practices-general'},
