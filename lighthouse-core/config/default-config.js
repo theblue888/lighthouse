@@ -236,6 +236,7 @@ const defaultConfig = {
     'largest-contentful-paint-element',
     'layout-shift-elements',
     'long-tasks',
+    'bloated-libraries',
     'manual/pwa-cross-browser',
     'manual/pwa-page-transitions',
     'manual/pwa-each-page-has-url',
@@ -304,7 +305,6 @@ const defaultConfig = {
     'byte-efficiency/uses-responsive-images',
     'byte-efficiency/efficient-animated-content',
     'dobetterweb/appcache-manifest',
-    'dobetterweb/bloated-libraries',
     'dobetterweb/doctype',
     'dobetterweb/charset',
     'dobetterweb/dom-size',
@@ -462,6 +462,7 @@ const defaultConfig = {
         {id: 'uses-passive-event-listeners', weight: 0, group: 'diagnostics'},
         {id: 'no-document-write', weight: 0, group: 'diagnostics'},
         {id: 'long-tasks', weight: 0, group: 'diagnostics'},
+        {id: 'bloated-libraries', weight: 0, group: 'diagnostics'},
         // Audits past this point don't belong to a group and will not be shown automatically
         {id: 'network-requests', weight: 0},
         {id: 'network-rtt', weight: 0},
@@ -554,7 +555,6 @@ const defaultConfig = {
         {id: 'charset', weight: 1, group: 'best-practices-browser-compat'},
         // General Group
         {id: 'appcache-manifest', weight: 1, group: 'best-practices-general'},
-        {id: 'bloated-libraries', weight: 0, group: 'best-practices-general'},
         {id: 'js-libraries', weight: 0, group: 'best-practices-general'},
         {id: 'deprecations', weight: 1, group: 'best-practices-general'},
         {id: 'errors-in-console', weight: 1, group: 'best-practices-general'},
