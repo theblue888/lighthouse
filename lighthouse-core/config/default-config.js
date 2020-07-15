@@ -236,7 +236,6 @@ const defaultConfig = {
     'largest-contentful-paint-element',
     'layout-shift-elements',
     'long-tasks',
-    'large-javascript-libraries',
     'manual/pwa-cross-browser',
     'manual/pwa-page-transitions',
     'manual/pwa-each-page-has-url',
@@ -329,6 +328,7 @@ const defaultConfig = {
     'seo/plugins',
     'seo/canonical',
     'seo/manual/structured-data',
+    'large-javascript-libraries/large-javascript-libraries',
   ],
 
   groups: {
