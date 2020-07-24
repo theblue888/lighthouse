@@ -364,6 +364,9 @@ Object {
       "path": "byte-efficiency/efficient-animated-content",
     },
     Object {
+      "path": "byte-efficiency/large-javascript-libraries",
+    },
+    Object {
       "path": "byte-efficiency/duplicated-javascript",
     },
     Object {
@@ -899,6 +902,11 @@ Object {
         Object {
           "group": "load-opportunities",
           "id": "efficient-animated-content",
+          "weight": 0,
+        },
+        Object {
+          "group": "load-opportunities",
+          "id": "large-javascript-libraries",
           "weight": 0,
         },
         Object {
