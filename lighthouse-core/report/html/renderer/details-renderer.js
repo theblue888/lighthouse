@@ -228,6 +228,9 @@ class DetailsRenderer {
     if (typeof value === 'object') {
       // The value's type overrides the heading's for this column.
       switch (value.type) {
+        case 'budget': {
+          return this.renderBudget(value);
+        }
         case 'code': {
           return this._renderCode(value.value);
         }
@@ -554,6 +557,22 @@ class DetailsRenderer {
     element.setAttribute('data-source-line', String(item.line));
     element.setAttribute('data-source-column', String(item.column));
     return element;
+  }
+
+  /**
+   * @param {LH.Audit.Details.BudgetValue} item
+   * @return {Element|null}
+   */
+  renderBudget(item) {
+    if (!item.value) {
+      return null;
+    }
+
+    if (item.metric && item.metric === 'cumulative-layout-shift') {
+      return this._renderNumeric({value: Number(item.value), granularity: 0.01});
+    }
+
+    return this._renderMilliseconds({value: Number(item.value), displayUnit: item.displayUnit});
   }
 
   /**

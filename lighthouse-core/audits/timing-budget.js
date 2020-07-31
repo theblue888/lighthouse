@@ -24,7 +24,7 @@ const UIStrings = {
 
 const str_ = i18n.createMessageInstanceIdFn(__filename, UIStrings);
 
-/** @typedef {{metric: LH.Budget.TimingMetric, label: string, measurement?: number, overBudget?: number}} BudgetItem */
+/** @typedef {{metric: LH.Budget.TimingMetric, label: string, measurement?: LH.Audit.Details.BudgetValue, overBudget?: LH.Audit.Details.BudgetValue}} BudgetItem */
 
 class TimingBudget extends Audit {
   /**
@@ -64,7 +64,7 @@ class TimingBudget extends Audit {
   /**
    * @param {LH.Budget.TimingMetric} timingMetric
    * @param {LH.Artifacts.TimingSummary} summary
-   * @return {number|undefined}
+   * @return {LH.Audit.Details.BudgetValue|undefined}
    */
   static getMeasurement(timingMetric, summary) {
     /** @type {Record<LH.Budget.TimingMetric, number|undefined>} */
@@ -80,7 +80,11 @@ class TimingBudget extends Audit {
       'largest-contentful-paint': summary.largestContentfulPaint,
       'cumulative-layout-shift': summary.cumulativeLayoutShift,
     };
-    return measurements[timingMetric];
+    return {
+      type: 'budget',
+      metric: timingMetric,
+      value: measurements[timingMetric],
+    };
   }
 
   /**
@@ -96,16 +100,20 @@ class TimingBudget extends Audit {
       const metricName = timingBudget.metric;
       const label = this.getRowLabel(metricName);
       const measurement = this.getMeasurement(metricName, summary);
-      const overBudget = measurement && (measurement > timingBudget.budget)
-        ? (measurement - timingBudget.budget) : undefined;
+      const overBudget = measurement && measurement.value && (measurement.value > timingBudget.budget)
+        ? (measurement.value - timingBudget.budget) : undefined;
       return {
         metric: metricName,
         label,
         measurement,
-        overBudget,
+        overBudget: /** @type {LH.Audit.Details.BudgetValue} */ ({
+          type: 'budget',
+          metric: metricName,
+          value: overBudget,
+        }),
       };
     }).sort((a, b) => {
-      return (b.overBudget || 0) - (a.overBudget || 0);
+      return ((b.overBudget && b.overBudget.value) || 0) - ((a.overBudget && a.overBudget.value) || 0);
     });
   }
 
