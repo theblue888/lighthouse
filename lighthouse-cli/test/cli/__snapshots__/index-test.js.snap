@@ -163,6 +163,9 @@ Object {
       "path": "no-unload-listeners",
     },
     Object {
+      "path": "large-javascript-libraries",
+    },
+    Object {
       "path": "manual/pwa-cross-browser",
     },
     Object {
@@ -362,9 +365,6 @@ Object {
     },
     Object {
       "path": "byte-efficiency/efficient-animated-content",
-    },
-    Object {
-      "path": "byte-efficiency/large-javascript-libraries",
     },
     Object {
       "path": "byte-efficiency/duplicated-javascript",
@@ -906,11 +906,6 @@ Object {
         },
         Object {
           "group": "load-opportunities",
-          "id": "large-javascript-libraries",
-          "weight": 0,
-        },
-        Object {
-          "group": "load-opportunities",
           "id": "duplicated-javascript",
           "weight": 0,
         },
@@ -1007,6 +1002,11 @@ Object {
         Object {
           "group": "diagnostics",
           "id": "long-tasks",
+          "weight": 0,
+        },
+        Object {
+          "group": "diagnostics",
+          "id": "large-javascript-libraries",
           "weight": 0,
         },
         Object {
