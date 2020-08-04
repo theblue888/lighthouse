@@ -1374,6 +1374,7 @@
 .lh-table .lh-table-column--thumbnail {
   width: var(--image-preview-size);
   padding: 0;
+  position: relative;
 }
 
 .lh-table-column--url {
@@ -1410,6 +1411,9 @@
   width: var(--image-preview-size);
   height: var(--image-preview-size);
   display: block;
+  position: absolute;
+  top: 50%;
+  margin-top: calc(var(--image-preview-size) / -2);
 }
 
 .lh-unknown pre {
