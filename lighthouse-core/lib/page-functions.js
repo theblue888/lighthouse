@@ -173,8 +173,8 @@ function ultradumbBenchmark() {
 function getNodePath(node) {
   /** @param {Node} node */
   function getNodeIndex(node) {
-    if (node === Node.DOCUMENT_FRAGMENT_NODE) {
-      // Shadow root that's not user-agent shadow root
+    if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      // User-agent shadow roots get 'u'. Non-UA shadow roots get 'a'.
       return 'a';
     }
     let index = 0;
