@@ -54,6 +54,7 @@ function cleanAndFormat(vulnString) {
   for (const [packageName, libEntries] of Object.entries(snapshot.npm)) {
     libEntries.forEach((entry, i) => {
       // snyk uses a convention for <0.0.0 to represent a mistaken vulnerability in their database.
+      // https://github.com/GoogleChrome/lighthouse/pull/11144#discussion_r465713835
       // From Lighthouse's perspective we don't need to care about these.
       const vulnerableVersions = entry.semver.vulnerable.filter(vuln => vuln !== '<0.0.0');
 
