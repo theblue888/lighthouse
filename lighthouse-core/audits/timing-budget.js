@@ -24,7 +24,7 @@ const UIStrings = {
 
 const str_ = i18n.createMessageInstanceIdFn(__filename, UIStrings);
 
-/** @typedef {{metric: LH.Budget.TimingMetric, label: string, measurement?: LH.Audit.Details.BudgetValue, overBudget?: LH.Audit.Details.BudgetValue}} BudgetItem */
+/** @typedef {{metric: LH.Budget.TimingMetric, label: string, measurement?: LH.Audit.Details.NumericValue|number, overBudget?: LH.Audit.Details.NumericValue|number}} BudgetItem */
 
 class TimingBudget extends Audit {
   /**
@@ -64,7 +64,7 @@ class TimingBudget extends Audit {
   /**
    * @param {LH.Budget.TimingMetric} timingMetric
    * @param {LH.Artifacts.TimingSummary} summary
-   * @return {LH.Audit.Details.BudgetValue|undefined}
+   * @return {number|undefined}
    */
   static getMeasurement(timingMetric, summary) {
     /** @type {Record<LH.Budget.TimingMetric, number|undefined>} */
@@ -80,11 +80,7 @@ class TimingBudget extends Audit {
       'largest-contentful-paint': summary.largestContentfulPaint,
       'cumulative-layout-shift': summary.cumulativeLayoutShift,
     };
-    return {
-      type: 'budget',
-      metric: timingMetric,
-      value: measurements[timingMetric],
-    };
+    return measurements[timingMetric];
   }
 
   /**
@@ -93,27 +89,47 @@ class TimingBudget extends Audit {
    * @return {Array<BudgetItem>}
    */
   static tableItems(budget, summary) {
+    /** @type {Array<BudgetItem>} */
+    const items = [];
     if (!budget.timings) {
-      return [];
+      return items;
     }
-    return budget.timings.map((timingBudget) => {
+
+    for (const timingBudget of budget.timings) {
       const metricName = timingBudget.metric;
       const label = this.getRowLabel(metricName);
       const measurement = this.getMeasurement(metricName, summary);
-      const overBudget = measurement && measurement.value && (measurement.value > timingBudget.budget)
-        ? (measurement.value - timingBudget.budget) : undefined;
-      return {
-        metric: metricName,
-        label,
-        measurement,
-        overBudget: /** @type {LH.Audit.Details.BudgetValue} */ ({
-          type: 'budget',
+      const overBudget = measurement && (measurement > timingBudget.budget)
+        ? (measurement - timingBudget.budget) : undefined;
+
+      if (metricName === 'cumulative-layout-shift') {
+        items.push({
           metric: metricName,
-          value: overBudget,
-        }),
-      };
-    }).sort((a, b) => {
-      return ((b.overBudget && b.overBudget.value) || 0) - ((a.overBudget && a.overBudget.value) || 0);
+          label,
+          measurement: {
+            type: 'numeric',
+            value: Number(measurement),
+            granularity: 0.01,
+          },
+          overBudget: {
+            type: 'numeric',
+            value: Number(overBudget),
+            granularity: 0.01,
+          },
+        });
+      } else {
+        items.push({
+          metric: metricName,
+          label,
+          measurement,
+          overBudget,
+        });
+      }
+    }
+    return items.sort((a, b) => {
+      const aVal = typeof a.overBudget === 'object' ? a.overBudget.value : a.overBudget;
+      const bVal = typeof b.overBudget === 'object' ? b.overBudget.value : b.overBudget;
+      return (bVal || 0) - (aVal || 0);
     });
   }
 

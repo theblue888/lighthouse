@@ -63,18 +63,18 @@ describe('Performance: Timing budget audit', () => {
       const items = result.details.items;
       // Failing Budget
       expect(items[0].label).toBeDisplayString('Estimated Input Latency');
-      expect(items[0].measurement.value).toBeCloseTo(77.8);
-      expect(items[0].overBudget.value).toBeCloseTo(67.8);
+      expect(items[0].measurement).toBeCloseTo(77.8);
+      expect(items[0].overBudget).toBeCloseTo(67.8);
     });
 
     it('calculates the "overBudget" column correctly', async () => {
       const result = await TimingBudgetAudit.audit(artifacts, context);
 
       // Failing Budget
-      expect(result.details.items[0].overBudget.value).toBeCloseTo(67.8);
+      expect(result.details.items[0].overBudget).toBeCloseTo(67.8);
 
       // Passing Budget
-      expect(result.details.items[1].overBudget.value).toBeUndefined();
+      expect(result.details.items[1].overBudget).toBeUndefined();
     });
 
     it('only includes rows for timing metrics with budgets', async () => {
@@ -109,11 +109,11 @@ describe('Performance: Timing budget audit', () => {
           const result = await TimingBudgetAudit.audit(artifacts, context);
           expect(result.details.items[0].label).toBeDefined();
           if (metric === 'largest-contentful-paint') {
-            expect(result.details.items[0].measurement.value).toEqual(undefined);
+            expect(result.details.items[0].measurement).toEqual(undefined);
           } else if (metric === 'cumulative-layout-shift') {
             expect(result.details.items[0].measurement.value).toEqual(0);
           } else {
-            expect(result.details.items[0].measurement.value).toBeGreaterThanOrEqual(1);
+            expect(result.details.items[0].measurement).toBeGreaterThanOrEqual(1);
           }
         }
       });
@@ -136,7 +136,7 @@ describe('Performance: Timing budget audit', () => {
         }];
         const result = await TimingBudgetAudit.audit(artifacts, context);
         expect(result.details.items).toHaveLength(1);
-        expect(result.details.items[0].measurement.value).toEqual(1121.711);
+        expect(result.details.items[0].measurement).toEqual(1121.711);
       });
     });
 
@@ -161,7 +161,7 @@ describe('Performance: Timing budget audit', () => {
       const result = await TimingBudgetAudit.audit(artifacts, context);
       const items = result.details.items;
       items.slice(0, -1).forEach((item, index) => {
-        expect(item.overBudget.value).toBeGreaterThanOrEqual(items[index + 1].overBudget.value);
+        expect(item.overBudget).toBeGreaterThanOrEqual(items[index + 1].overBudget);
       });
     });
   });
